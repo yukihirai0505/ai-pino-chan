@@ -1,8 +1,8 @@
 ## Deploy
 
 ```
-$ now secret add line-channel-access-token ""
-$ now secret add line-channel-secret ""
+$ now secret add line-ai-pino-chan-channel-access-token ""
+$ now secret add line-ai-pino-chan-channel-secret ""
 $ yarn deploy
 ```
 

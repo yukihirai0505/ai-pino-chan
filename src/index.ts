@@ -11,6 +11,7 @@ const config = {
 
 const webHookEvent = async (req: ServerRequest, res: ServerResponse) => {
   const data: any = await json(req)
+  console.log(JSON.stringify(data))
   await Promise.all(data.events.map(handleEvent))
   return send(res, 200, 'ok')
 }
@@ -30,10 +31,19 @@ function handleEvent(event: line.MessageEvent) {
     return Promise.resolve(null)
   }
 
-  return client.replyMessage(event.replyToken, {
-    type: 'text',
-    text: event.message.text,
-  })
+  return client.replyMessage(event.replyToken, [
+    {
+      type: 'text',
+      text: event.message.text,
+    },
+    {
+      type: 'image',
+      originalContentUrl:
+        'https://scontent-nrt1-1.cdninstagram.com/vp/40c51c08d3949b2f1745d6b9db267797/5D9C6B1F/t51.2885-15/e35/67921707_228180741477137_3189105514100041584_n.jpg?_nc_ht=scontent-nrt1-1.cdninstagram.com&_nc_cat=105',
+      previewImageUrl:
+        'https://scontent-nrt1-1.cdninstagram.com/vp/40c51c08d3949b2f1745d6b9db267797/5D9C6B1F/t51.2885-15/e35/67921707_228180741477137_3189105514100041584_n.jpg?_nc_ht=scontent-nrt1-1.cdninstagram.com&_nc_cat=105',
+    },
+  ])
 }
 
 const server = micro(handler)
