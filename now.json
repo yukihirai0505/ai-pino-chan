@@ -6,6 +6,7 @@
   "routes": [{ "src": "/(.*)", "dest": "/src/index.ts" }],
   "env": {
     "LINE_CHANNEL_ACCESS_TOKEN": "@line-ai-pino-chan-channel-access-token",
-    "LINE_CHANNEL_SECRET": "@line-ai-pino-chan-channel-secret"
+    "LINE_CHANNEL_SECRET": "@line-ai-pino-chan-channel-secret",
+    "A3RT_API_KEY": "@a3rt-api-key"
   }
 }

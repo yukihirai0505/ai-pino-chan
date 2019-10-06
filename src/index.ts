@@ -1,8 +1,13 @@
 import micro, { send, json } from 'micro'
 import { router, get, post, ServerResponse, ServerRequest } from 'microrouter'
 import * as line from '@line/bot-sdk'
+import axios from 'axios'
 
-const { LINE_CHANNEL_ACCESS_TOKEN, LINE_CHANNEL_SECRET } = process.env
+const {
+  LINE_CHANNEL_ACCESS_TOKEN,
+  LINE_CHANNEL_SECRET,
+  A3RT_API_KEY,
+} = process.env
 
 const config = {
   channelAccessToken: LINE_CHANNEL_ACCESS_TOKEN!,
@@ -19,6 +24,12 @@ const webHookEvent = async (req: ServerRequest, res: ServerResponse) => {
 const notFound = (_: ServerRequest, res: ServerResponse) =>
   send(res, 404, 'Not found route')
 
+const encodeForm = (data: any) => {
+  return Object.keys(data)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+    .join('&')
+}
+
 const handler = router(
   get('/', () => 'Hello World!'),
   post('/', webHookEvent),
@@ -26,15 +37,26 @@ const handler = router(
 )
 
 const client = new line.Client(config)
-function handleEvent(event: line.MessageEvent) {
+async function handleEvent(event: line.MessageEvent) {
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null)
   }
 
+  const response = await axios.post(
+    'https://api.a3rt.recruit-tech.co.jp/talk/v1/smalltalk',
+    encodeForm({
+      apikey: A3RT_API_KEY,
+      query: event.message.text,
+    })
+  )
+  const { results } = response.data
+  console.log(results)
+  const reply = results[0].reply
+
   return client.replyMessage(event.replyToken, [
     {
       type: 'text',
-      text: event.message.text,
+      text: reply,
     },
     {
       type: 'image',

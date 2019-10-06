@@ -3,6 +3,7 @@
 ```
 $ now secret add line-ai-pino-chan-channel-access-token ""
 $ now secret add line-ai-pino-chan-channel-secret ""
+$ now secret add a3rt-api-key ""
 $ yarn deploy
 ```
 
