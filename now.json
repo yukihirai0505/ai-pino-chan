@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "twitterati",
+  "alias": "twitterati.now.sh",
+  "builds": [{ "src": "src/index.ts", "use": "@now/node-server" }],
+  "routes": [{ "src": "/(.*)", "dest": "/src/index.ts" }],
+  "env": {
+    "LINE_CHANNEL_ACCESS_TOKEN": "@line-channel-access-token",
+    "LINE_CHANNEL_SECRET": "@line-channel-secret"
+  }
+}
